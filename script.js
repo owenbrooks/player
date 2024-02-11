@@ -5,16 +5,29 @@ function handleFiles() {
   const fileUrl = URL.createObjectURL(fileList[0]);
   wavesurfer = WaveSurfer.create({
     container: "#waveform",
-    waveColor: "rgb(200, 0, 200)",
-    progressColor: "rgb(100, 0, 100)",
+    waveColor: "rgb(100, 0, 100)",
+    progressColor: "rgb(200, 0, 200)",
     cursorWidth: 1,
     url: fileUrl,
   });
 
   // Show waveform
   const waveformContainer = document.getElementById("waveform-container");
-  waveformContainer.style.display = '';
+  waveformContainer.style.display = "";
 }
+
+// For debugging / dev
+wavesurfer = WaveSurfer.create({
+  container: "#waveform",
+  waveColor: "#ec4899",
+  progressColor: "#be185d",
+  cursorWidth: 1,
+  cursorColor: "white",
+  url: "sing.mp3",
+});
+// Show waveform
+const waveformContainer = document.getElementById("waveform-container");
+waveformContainer.style.display = "";
 
 const marks = [{ id: 0, time: 0.0 }];
 
