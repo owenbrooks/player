@@ -48,10 +48,6 @@ function seekToPreviousMark(playhead) {
 
 function seekToNextMark(playhead) {
   if (marks.length === 0) return;
-  if (marks.length === 1 && marks[0].time > playhead) {
-    wavesurfer.seekTo(marks[0].time);
-    return;
-  }
   let closestMark = null;
   for (let mark of [...marks].reverse()) {
     if (mark.time > playhead) {
@@ -104,7 +100,6 @@ function removeClosestMark(playhead) {
 
     // Remove from DOM
     const closestMarkId = marks[closestIndex].id;
-    console.log(closestIndex, marks[closestIndex]);
     this.document
       .getElementById("marks")
       .removeChild(this.document.getElementById(`mark${closestMarkId}`));
