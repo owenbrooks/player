@@ -3,14 +3,20 @@
 }
 
 #waveform {
-    background-color:burlywood;
-    border-radius: 1rem;
-    border: 2px solid black;
-    padding: 5px;
+  background-color: burlywood;
+  border-radius: 1rem;
+  border: 2px solid black;
+  padding: 5px;
 }
 
 .mark {
-    background-color: black;
-    height: 40px;
-    width: 20px;
+  position: absolute;
+
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+
+  border-bottom: 5px solid black;
+  transform: translate(-50%, 0%);
 }

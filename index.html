@@ -8,13 +8,16 @@
     <title>My Web Page</title>
   </head>
   <body class="p-4">
-    <div id="waveform" class="waveform">
-      <span id="marks"></span>
+    <div id="waveform" class="waveform"></div>
+    <div class="px-2">
+      <div id="marks" class="w-full h-10" style="position: relative">
+        <div class="mark" style="left: 0%"></div>
+      </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
-    <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.esm.js"></script>
+    <!-- <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.esm.js"></script> -->
     <script src="./wavesurfer.js"></script>
   </body>
 </html>
