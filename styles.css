@@ -1,0 +1,16 @@
+#waveform ::part(region) {
+  background-color: rgba(0, 0, 100, 0.888) !important;
+}
+
+#waveform {
+    background-color:burlywood;
+    border-radius: 1rem;
+    border: 2px solid black;
+    padding: 5px;
+}
+
+.mark {
+    background-color: black;
+    height: 40px;
+    width: 20px;
+}
