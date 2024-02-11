@@ -1,10 +1,20 @@
-const wavesurfer = WaveSurfer.create({
-  container: "#waveform",
-  waveColor: "rgb(200, 0, 200)",
-  progressColor: "rgb(100, 0, 100)",
-  cursorWidth: 1,
-  url: "sing.mp3",
-});
+const inputElement = document.getElementById("filepicker");
+inputElement.addEventListener("change", handleFiles, false);
+function handleFiles() {
+  const fileList = this.files;
+  const fileUrl = URL.createObjectURL(fileList[0]);
+  wavesurfer = WaveSurfer.create({
+    container: "#waveform",
+    waveColor: "rgb(200, 0, 200)",
+    progressColor: "rgb(100, 0, 100)",
+    cursorWidth: 1,
+    url: fileUrl,
+  });
+
+  // Show waveform
+  const waveformContainer = document.getElementById("waveform-container");
+  waveformContainer.style.display = '';
+}
 
 const marks = [{ id: 0, time: 0.0 }];
 
@@ -87,22 +97,22 @@ function addMark(percentage) {
 }
 
 function removeClosestMark(playhead) {
-    // Find closest mark to current position
-    const distances = marks.map((mark) => Math.abs(mark.time - playhead));
-    let closestIndex = 0;
-    let closestDist = distances[0];
-    for (let index = 0; index < distances.length; index++) {
-      if (distances[index] < closestDist) {
-        closestIndex = index;
-        closestDist = distances[index];
-      }
+  // Find closest mark to current position
+  const distances = marks.map((mark) => Math.abs(mark.time - playhead));
+  let closestIndex = 0;
+  let closestDist = distances[0];
+  for (let index = 0; index < distances.length; index++) {
+    if (distances[index] < closestDist) {
+      closestIndex = index;
+      closestDist = distances[index];
     }
+  }
 
-    // Remove from DOM
-    const closestMarkId = marks[closestIndex].id;
-    this.document
-      .getElementById("marks")
-      .removeChild(this.document.getElementById(`mark${closestMarkId}`));
-    // Remove from state
-    marks.splice(closestIndex, 1);
+  // Remove from DOM
+  const closestMarkId = marks[closestIndex].id;
+  this.document
+    .getElementById("marks")
+    .removeChild(this.document.getElementById(`mark${closestMarkId}`));
+  // Remove from state
+  marks.splice(closestIndex, 1);
 }

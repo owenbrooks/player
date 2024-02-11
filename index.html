@@ -4,16 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles.css" />
-    <title>My Web Page</title>
+    <title>Player</title>
   </head>
   <body style="padding: 12px">
-    <div id="waveform" class="waveform"></div>
-    <div style="padding-inline: 8px;">
-      <div id="marks" style="width: 100%; height: 40px; position: relative">
-        <div id="mark0" class="mark" style="left: 0%"></div>
+    <input type="file" id="filepicker" multiple />
+    <br />
+    <br />
+    <div id="waveform-container" style="display: none;">
+      <div id="waveform" class="waveform"></div>
+      <div style="padding-inline: 8px">
+        <div id="marks" style="width: 100%; height: 40px; position: relative">
+          <div id="mark0" class="mark" style="left: 0%"></div>
+        </div>
       </div>
     </div>
-    
+
     <p>Spacebar to play/pause</p>
     <p>Down arrow to add mark</p>
     <p>Left arrow seek to previous mark</p>
@@ -22,6 +27,6 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
-    <script src="./wavesurfer.js"></script>
+    <script src="./script.js"></script>
   </body>
 </html>
