@@ -6,7 +6,20 @@ const wavesurfer = WaveSurfer.create({
   url: "sing.mp3",
 });
 
-const marks = { 0: 0.0 };
+const marks = [{ id: 0, time: 0.0 }];
+
+function findClosestIndex(arr, target) {
+  let closest = 0;
+  let closestDist = Math.abs(arr[0] - target);
+  for (let i = 1; i < arr.length; i++) {
+    const dist = Math.abs(arr[i] - target);
+    if (dist < closestDist) {
+      closest = i;
+      closestDist = dist;
+    }
+  }
+  return closest;
+}
 
 addEventListener("keydown", function (event) {
   if (event.key === " ") {
@@ -16,46 +29,88 @@ addEventListener("keydown", function (event) {
     addMark(percentage);
   } else if (event.key == "ArrowLeft") {
     const percentage = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    const prevMark = Object.entries(marks).reduce((prev, curr) => {
-      return curr[1] < percentage ? curr : prev;
-    });
-    wavesurfer.seekTo(prevMark[1]);
-  } else if (event.key == "ArrowRight") {
-    const percentage = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    for (let mark in marks) {
-      if (marks[mark] > percentage) {
-        wavesurfer.seekTo(marks[mark]);
+    if (marks.length === 0) return;
+    if (marks.length === 1 && marks[0].time < percentage) {
+      wavesurfer.seekTo(marks[0].time);
+      return;
+    }
+    let closestMark = null;
+    for (let mark of marks) {
+      if (mark.time < percentage) {
+        closestMark = mark;
+      } else {
         break;
       }
     }
-  } else if (event.key == "ArrowUp" || event.key === "Up") {
+    if (closestMark !== null) {
+      wavesurfer.seekTo(closestMark.time);
+    }
+  } else if (event.key == "ArrowRight") {
     const percentage = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    console.log(marks);
-    const closestMark = Object.entries(marks).reduce((prev, curr) => {
-      return Math.abs(curr[1] - percentage) < Math.abs(prev[1] - percentage)
-        ? curr
-        : prev;
-    });
+    if (marks.length === 0) return;
+    if (marks.length === 1 && marks[0].time > percentage) {
+      wavesurfer.seekTo(marks[0].time);
+      return;
+    }
+    let closestMark = null;
+    for (let mark of [...marks].reverse()) {
+      if (mark.time > percentage) {
+        closestMark = mark;
+      } else {
+        break;
+      }
+    }
+    if (closestMark !== null) {
+      wavesurfer.seekTo(closestMark.time);
+    }
+  } else if (event.key == "ArrowUp" || event.key === "Up") {
+    // TODO this is broken
+    if (marks.length === 0) return;
+    const percentage = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
+    
+    // Find closest mark
+    const distances = marks.map((mark) => Math.abs(mark.time - percentage));
+    let closestIndex = 0;
+    let closestDist = distances[0];
+    for (let index = 0; index < distances.length; index++) {
+      if (distances[index] < closestDist) {
+        closestIndex = index;
+        closestDist = distances[index];
+      } 
+    }
 
-    console.log(closestMark);
-    delete marks[closestMark[0]];
-    this.document.getElementById("marks").removeChild(
-      this.document.getElementById(`mark${closestMark[0]}`)
-    );
+    // Remove from DOM
+    const closestMarkId = marks[closestIndex].id;
+    console.log(closestIndex, marks[closestIndex])
+    this.document
+      .getElementById("marks")
+      .removeChild(this.document.getElementById(`mark${closestMarkId}`));
+    // Remove from state
+    marks.splice(closestIndex, 1);
   }
 });
 
 function addMark(percentage) {
-  if (!Object.values(marks).includes(percentage)) {
-    let keys = Object.keys(marks);
-    let keyNums = keys.map((key) => Number(key));
-    let maxKey = Math.max(...keyNums);
-    const id = maxKey + 1;
+  if (!marks.map((mark) => mark.time).includes(percentage)) {
+    let newId;
+    if (marks.length === 0) {
+      newId = 0;
+    } else {
+      const ids = marks.map((mark) => mark.id);
+      let maxId = Math.max(...ids);
+      newId = maxId + 1;
+    }
+
+    // Record new mark in state
+    marks.push({ id: newId, time: percentage });
+    marks.sort((a, b) => a.time - b.time);
+
+    // Create new mark in the DOM
     const mark = document.createElement("div");
     mark.classList.add("mark");
     mark.style.left = `${percentage * 100}%`;
-    mark.id = `mark${id}`;
+    mark.id = `mark${newId}`;
     document.querySelector("#marks").appendChild(mark);
-    marks[id * 1] = percentage;
+
   }
 }
