@@ -25,6 +25,9 @@
     <p>Left arrow seek to previous mark</p>
     <p>Right arrow seek to next mark</p>
     <p>Up arrow to delete closest mark</p>
+    
+    <label for="volume">Volume</label>
+    <input type="range" id="volume" name="volume" min="0" max="100" value="100" onchange="handleVolumeChange(this)"/>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/wavesurfer.js@7"></script>

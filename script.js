@@ -5,9 +5,10 @@ function handleFiles() {
   const fileUrl = URL.createObjectURL(fileList[0]);
   wavesurfer = WaveSurfer.create({
     container: "#waveform",
-    waveColor: "rgb(100, 0, 100)",
-    progressColor: "rgb(200, 0, 200)",
+    waveColor: "#ec4899",
+    progressColor: "#be185d",
     cursorWidth: 1,
+    cursorColor: "white",
     url: fileUrl,
   });
 
@@ -16,18 +17,25 @@ function handleFiles() {
   waveformContainer.style.display = "";
 }
 
-// For debugging / dev
-wavesurfer = WaveSurfer.create({
-  container: "#waveform",
-  waveColor: "#ec4899",
-  progressColor: "#be185d",
-  cursorWidth: 1,
-  cursorColor: "white",
-  url: "sing.mp3",
-});
-// Show waveform
-const waveformContainer = document.getElementById("waveform-container");
-waveformContainer.style.display = "";
+// // For debugging / dev
+// wavesurfer = WaveSurfer.create({
+//   container: "#waveform",
+//   waveColor: "#ec4899",
+//   progressColor: "#be185d",
+//   cursorWidth: 1,
+//   cursorColor: "white",
+//   url: "sing.mp3",
+// });
+// // Show waveform
+// const waveformContainer = document.getElementById("waveform-container");
+// waveformContainer.style.display = "";
+
+function handleVolumeChange(inputElement) {
+  const maxVolume = 100;
+  const newVolume = inputElement.value;
+  const volumeFraction = newVolume / maxVolume;
+  wavesurfer.setVolume(volumeFraction);
+}
 
 const marks = [{ id: 0, time: 0.0 }];
 
