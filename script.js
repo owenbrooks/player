@@ -1,8 +1,20 @@
+let marks = [{ id: 0, time: 0.0 }];
+let fileName = "";
+
 const inputElement = document.getElementById("filepicker");
 inputElement.addEventListener("change", handleFiles, false);
+
+// Load volume setting if we have any saved
+const volume = localStorage.getItem("volume");
+if (volume) {
+  document.getElementById("volume").value = volume;
+}
+
 function handleFiles() {
   const fileList = this.files;
-  const fileUrl = URL.createObjectURL(fileList[0]);
+  const file = fileList[0];
+  fileName = file.name;
+  const fileUrl = URL.createObjectURL(file);
   wavesurfer = WaveSurfer.create({
     container: "#waveform",
     waveColor: "#ec4899",
@@ -12,9 +24,18 @@ function handleFiles() {
     url: fileUrl,
   });
 
+  // Load marks if we have any saved
+  loadMarks(fileName);
+
+  // Set volume
+  const volumeInput = document.getElementById("volume");
+  handleVolumeChange(volumeInput);
+  
   // Show waveform
   const waveformContainer = document.getElementById("waveform-container");
   waveformContainer.style.display = "";
+  const uploadPrompt = document.getElementById("upload-prompt");
+  uploadPrompt.style.display = "none";
 }
 
 // // For debugging / dev
@@ -35,26 +56,30 @@ function handleVolumeChange(inputElement) {
   const newVolume = inputElement.value;
   const volumeFraction = newVolume / maxVolume;
   wavesurfer.setVolume(volumeFraction);
+  localStorage.setItem("volume", newVolume);
 }
-
-const marks = [{ id: 0, time: 0.0 }];
 
 addEventListener("keydown", function (event) {
   if (event.key === " ") {
     wavesurfer.playPause();
+    event.preventDefault(); // stop space from scrolling the page or opening file input
   } else if (event.key === "ArrowDown" || event.key === "Down") {
     const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
     addMark(playhead);
+    saveMarks();
   } else if (event.key == "ArrowLeft") {
     const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
     seekToPreviousMark(playhead);
+    event.preventDefault(); // stop arrow from changing volume
   } else if (event.key == "ArrowRight") {
     const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
     seekToNextMark(playhead);
+    event.preventDefault(); // stop arrow from changing volume
   } else if (event.key == "ArrowUp" || event.key === "Up") {
     if (marks.length === 0) return;
     const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
     removeClosestMark(playhead);
+    saveMarks();
   }
 });
 
@@ -92,6 +117,11 @@ function seekToNextMark(playhead) {
   }
 }
 
+function handleMarkClick(markdiv) {
+  const markTime = markdiv.style.left.slice(0, -1) / 100;
+  wavesurfer.seekTo(markTime);
+}
+
 function addMark(percentage) {
   if (!marks.map((mark) => mark.time).includes(percentage)) {
     // Compute new mark id
@@ -113,6 +143,7 @@ function addMark(percentage) {
     mark.classList.add("mark");
     mark.style.left = `${percentage * 100}%`;
     mark.id = `mark${newId}`;
+    mark.onclick = () => handleMarkClick(mark);
     document.querySelector("#marks").appendChild(mark);
   }
 }
@@ -136,4 +167,21 @@ function removeClosestMark(playhead) {
     .removeChild(this.document.getElementById(`mark${closestMarkId}`));
   // Remove from state
   marks.splice(closestIndex, 1);
+}
+
+function saveMarks() {
+  const marksToSave = marks.slice(1); // Remove the initial mark at 0
+  const marksJson = JSON.stringify(marksToSave);
+  localStorage.setItem(fileName, marksJson);
+}
+
+function loadMarks(songName) {
+  const marksJson = localStorage.getItem(songName);
+  if (marksJson) {
+    marks = [{ id: 0, time: 0.0 }];
+    const marksToLoad = JSON.parse(marksJson);
+    for (let mark of marksToLoad) {
+      addMark(mark.time);
+    }
+  }
 }
