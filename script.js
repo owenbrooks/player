@@ -1,5 +1,6 @@
 let marks = [{ id: 0, time: 0.0 }];
 let fileName = "";
+let wavesurfer = undefined;
 
 const inputElement = document.getElementById("filepicker");
 inputElement.addEventListener("change", handleFiles, false);
@@ -15,6 +16,12 @@ function handleFiles() {
   const file = fileList[0];
   fileName = file.name;
   const fileUrl = URL.createObjectURL(file);
+
+  // Remove previous waveform if there was one
+  if (wavesurfer !== undefined) {
+    wavesurfer.destroy();
+  }
+
   wavesurfer = WaveSurfer.create({
     container: "#waveform",
     waveColor: "#ec4899",
@@ -30,7 +37,7 @@ function handleFiles() {
   // Set volume
   const volumeInput = document.getElementById("volume");
   handleVolumeChange(volumeInput);
-  
+
   // Show waveform
   const waveformContainer = document.getElementById("waveform-container");
   waveformContainer.style.display = "";
@@ -169,6 +176,18 @@ function removeClosestMark(playhead) {
   marks.splice(closestIndex, 1);
 }
 
+function removeAllMarks() {
+  // Remove from DOM
+  for (let mark of marks) {
+    if (mark.id !== 0) {
+      this.document.getElementById(`mark${mark.id}`).remove();
+    }
+  }
+
+  // Remove from state
+  marks = [{ id: 0, time: 0.0 }];
+}
+
 function saveMarks() {
   const marksToSave = marks.slice(1); // Remove the initial mark at 0
   const marksJson = JSON.stringify(marksToSave);
@@ -176,6 +195,7 @@ function saveMarks() {
 }
 
 function loadMarks(songName) {
+  removeAllMarks();
   const marksJson = localStorage.getItem(songName);
   if (marksJson) {
     marks = [{ id: 0, time: 0.0 }];
