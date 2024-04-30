@@ -76,12 +76,10 @@ addEventListener("keydown", function (event) {
     addMark(playhead);
     saveMarks();
   } else if (event.key == "ArrowLeft") {
-    const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    seekToPreviousMark(playhead);
+    seekToPreviousMark();
     event.preventDefault(); // stop arrow from changing volume
   } else if (event.key == "ArrowRight") {
-    const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    seekToNextMark(playhead);
+    seekToNextMark();
     event.preventDefault(); // stop arrow from changing volume
   } else if (event.key == "ArrowUp" || event.key === "Up") {
     if (marks.length === 0) return;
@@ -108,7 +106,8 @@ function playpause() {
   
 }
 
-function seekToPreviousMark(playhead) {
+function seekToPreviousMark() {
+  const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   if (marks.length === 0) return;
   if (marks.length === 1 && marks[0].time < playhead) {
     wavesurfer.seekTo(marks[0].time);
@@ -127,7 +126,8 @@ function seekToPreviousMark(playhead) {
   }
 }
 
-function seekToNextMark(playhead) {
+function seekToNextMark() {
+  const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   if (marks.length === 0) return;
   let closestMark = null;
   for (let mark of [...marks].reverse()) {
