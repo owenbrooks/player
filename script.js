@@ -1,6 +1,7 @@
 let marks = [{ id: 0, time: 0.0 }];
 let fileName = "";
 let wavesurfer = undefined;
+let playing = false;
 
 const inputElement = document.getElementById("filepicker");
 inputElement.addEventListener("change", handleFiles, false);
@@ -89,6 +90,23 @@ addEventListener("keydown", function (event) {
     saveMarks();
   }
 });
+
+
+function playpause() {
+  playing = !playing;
+  wavesurfer?.playPause();
+  const play_icon = document.getElementById("play-icon");
+  const pause_icon = document.getElementById("pause-icon");
+  
+  if (playing) {
+    play_icon.style.display = "none";
+    pause_icon.style.display = "block";
+  } else {
+    play_icon.style.display = "block";
+    pause_icon.style.display = "none";
+  }
+  
+}
 
 function seekToPreviousMark(playhead) {
   if (marks.length === 0) return;

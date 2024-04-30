@@ -37,3 +37,43 @@ body {
 .mark:hover {
   border-bottom: 13px solid #ec4899;
 }
+
+.controls {
+  border-radius: 50%;
+  background-color: #262626;
+  padding: 20px;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  color: #be185d;
+  /* background-color: #04AA6D;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px; */
+}
+
+.play-icon {
+  /* position: absolute; */
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid #be185d;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid #be185d;
+  border-color: transparent transparent transparent #be185d;
+  transform: translate(30%);
+}
+
+.pause-icon {
+  /* position: absolute; */
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid blue;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid blue;
+  border-color: transparent transparent transparent blue;
+  transform: translate(30%);
+}
