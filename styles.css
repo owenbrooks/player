@@ -45,6 +45,8 @@ body {
   border: none;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   color: #be185d;
+  appearance: none;
+  -webkit-appearance: none;
   /* background-color: #04AA6D;
   color: white;
   padding: 15px 32px;
