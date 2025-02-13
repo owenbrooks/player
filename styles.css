@@ -57,7 +57,6 @@ body {
 }
 
 .play-icon {
-  /* position: absolute; */
   width: 0;
   height: 0;
   border-left: 20px solid transparent;
@@ -69,13 +68,19 @@ body {
 }
 
 .pause-icon {
-  /* position: absolute; */
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid blue;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid blue;
+  width: 23px;
+  height: 20px;
   border-color: transparent transparent transparent blue;
-  transform: translate(30%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.pause-bar {
+  width: 20px;
+  height: 26px;
+  background-color: #be185d;
+  border-radius: 1px;
 }

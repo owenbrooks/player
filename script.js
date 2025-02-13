@@ -102,6 +102,9 @@ addEventListener("keydown", function (event) {
 
 
 function playpause() {
+  if (!wavesurfer) {
+    return;
+  }
   playing = !playing;
   wavesurfer?.playPause();
   handleSpeedChange(document.getElementById("speedSelect"));
@@ -110,7 +113,7 @@ function playpause() {
 
   if (playing) {
     play_icon.style.display = "none";
-    pause_icon.style.display = "block";
+    pause_icon.style.display = "flex";
   } else {
     play_icon.style.display = "block";
     pause_icon.style.display = "none";
