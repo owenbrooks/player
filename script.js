@@ -6,7 +6,7 @@ let playing = false;
 const inputElement = document.getElementById("filepicker");
 inputElement.addEventListener("change", handleFiles, false);
 
-// Load volume setting if we have any saved
+// Load volume and speed settings if we have any saved
 const volume = localStorage.getItem("volume");
 if (volume) {
   document.getElementById("volume").value = volume;
@@ -35,9 +35,10 @@ function handleFiles() {
   // Load marks if we have any saved
   loadMarks(fileName);
 
-  // Set volume
+  // Set volume based on current inputs
   const volumeInput = document.getElementById("volume");
   handleVolumeChange(volumeInput);
+  // Note: setting speed here doesn't seem to work, so we set it when playing
 
   // Show waveform
   const waveformContainer = document.getElementById("waveform-container");
@@ -59,18 +60,28 @@ function handleFiles() {
 // const waveformContainer = document.getElementById("waveform-container");
 // waveformContainer.style.display = "";
 
+// Speed control
+function handleSpeedChange(elem) {
+  const newSpeed = parseFloat(elem.value);
+  if (wavesurfer) {
+    wavesurfer.setPlaybackRate(newSpeed);
+  }
+};
+
 function handleVolumeChange(inputElement) {
   const maxVolume = 100;
   const newVolume = inputElement.value;
   const volumeFraction = newVolume / maxVolume;
-  wavesurfer.setVolume(volumeFraction);
+  if (wavesurfer) {
+    wavesurfer.setVolume(volumeFraction);
+  }
   localStorage.setItem("volume", newVolume);
 }
 
 addEventListener("keydown", function (event) {
   if (event.key === " ") {
-    wavesurfer.playPause();
     event.preventDefault(); // stop space from scrolling the page or opening file input
+    playpause();
   } else if (event.key === "ArrowDown" || event.key === "Down") {
     const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
     addMark(playhead);
@@ -93,9 +104,10 @@ addEventListener("keydown", function (event) {
 function playpause() {
   playing = !playing;
   wavesurfer?.playPause();
+  handleSpeedChange(document.getElementById("speedSelect"));
   const play_icon = document.getElementById("play-icon");
   const pause_icon = document.getElementById("pause-icon");
-  
+
   if (playing) {
     play_icon.style.display = "none";
     pause_icon.style.display = "block";
@@ -103,7 +115,6 @@ function playpause() {
     play_icon.style.display = "block";
     pause_icon.style.display = "none";
   }
-  
 }
 
 function seekToPreviousMark() {
