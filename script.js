@@ -1,7 +1,8 @@
 let marks = [{ id: 0, time: 0.0 }];
 let fileName = "";
 let wavesurfer = undefined;
-let playing = false;
+let isPlaying = false;
+let unsubscribeFn = null;
 
 const inputElement = document.getElementById("filepicker");
 inputElement.addEventListener("change", handleFiles, false);
@@ -20,6 +21,9 @@ function handleFiles() {
 
   // Remove previous waveform if there was one
   if (wavesurfer !== undefined) {
+    if (unsubscribeFn) {
+      unsubscribeFn();
+    }
     wavesurfer.destroy();
   }
 
@@ -31,6 +35,7 @@ function handleFiles() {
     cursorColor: "white",
     url: fileUrl,
   });
+  unsubscribeFn = wavesurfer.on("finish", handleFinish);
 
   // Load marks if we have any saved
   loadMarks(fileName);
@@ -78,6 +83,10 @@ function handleVolumeChange(inputElement) {
   localStorage.setItem("volume", newVolume);
 }
 
+function handleFinish() {
+  setPlaying(false);
+}
+
 addEventListener("keydown", function (event) {
   if (event.key === " ") {
     event.preventDefault(); // stop space from scrolling the page or opening file input
@@ -100,18 +109,29 @@ addEventListener("keydown", function (event) {
   }
 });
 
-
-function playpause() {
+function setPlaying(shouldPlay) {
   if (!wavesurfer) {
     return;
   }
-  playing = !playing;
-  wavesurfer?.playPause();
+  isPlaying = shouldPlay; 
+  if (shouldPlay) {
+    wavesurfer.play();
+  } else {
+    wavesurfer.pause();
+  }
   handleSpeedChange(document.getElementById("speedSelect"));
+  updatePlayIcon();
+}
+
+function playpause() {
+  setPlaying(!isPlaying);
+}
+
+function updatePlayIcon() {
   const play_icon = document.getElementById("play-icon");
   const pause_icon = document.getElementById("pause-icon");
 
-  if (playing) {
+  if (isPlaying) {
     play_icon.style.display = "none";
     pause_icon.style.display = "flex";
   } else {
