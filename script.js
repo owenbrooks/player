@@ -74,18 +74,14 @@ function handleSpeedChange(elem) {
 
 function updateSpeed(value) {
   currentSpeed = value;
-  if (wavesurfer) {
-    wavesurfer.setPlaybackRate(currentSpeed);
-  }
+  wavesurfer?.setPlaybackRate(currentSpeed);
 }
 
 function handleVolumeChange(inputElement) {
   const maxVolume = 100;
   const newVolume = inputElement.value;
   const volumeFraction = newVolume / maxVolume;
-  if (wavesurfer) {
-    wavesurfer.setVolume(volumeFraction);
-  }
+  wavesurfer?.setVolume(volumeFraction);
   localStorage.setItem("volume", newVolume);
 }
 
@@ -142,6 +138,9 @@ function updatePlayIcon() {
 }
 
 function seekToPreviousMark() {
+  if (!wavesurfer) {
+    return;
+  }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   if (marks.length === 0) return;
   if (marks.length === 1 && marks[0].time < playhead) {
@@ -162,6 +161,9 @@ function seekToPreviousMark() {
 }
 
 function seekToNextMark() {
+  if (!wavesurfer) {
+    return;
+  }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   if (marks.length === 0) return;
   let closestMark = null;
@@ -178,17 +180,26 @@ function seekToNextMark() {
 }
 
 function handleMarkClick(markdiv) {
+  if (!wavesurfer) {
+    return;
+  }
   const markTime = markdiv.style.left.slice(0, -1) / 100;
   wavesurfer.seekTo(markTime);
 }
 
 function handleMarkAdd() {
+  if (!wavesurfer) {
+    return;
+  }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   addMark(playhead);
   saveMarks();
 }
 
 function handleMarkRemove() {
+  if (!wavesurfer) {
+    return;
+  }
   if (marks.length === 0) return;
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   removeClosestMark(playhead);
