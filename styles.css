@@ -104,6 +104,7 @@ body {
   appearance: none;
   -webkit-appearance: none;
   font-size: 2rem;
+  touch-action: manipulation;
 }
 
 .bookmark-button {
@@ -120,6 +121,7 @@ body {
   background: transparent;
   color: #be185d;
   font-size: 1.5rem;
+  touch-action: manipulation;
 }
 
 .bookmark-button:hover {
@@ -159,6 +161,7 @@ body {
   justify-items: center;
   align-items: center;
   font-size: 1.2rem;
+  touch-action: manipulation;
 }
 
 .speed-radio {
