@@ -6,7 +6,7 @@ let currentSpeed = 1.0;
 let unsubscribeFn = null;
 
 const inputElement = document.getElementById("filepicker");
-inputElement.addEventListener("change", handleFiles, false);
+inputElement.addEventListener("change", handleFilePicker, false);
 
 // Load volume and speed settings if we have any saved
 const volume = localStorage.getItem("volume");
@@ -14,9 +14,26 @@ if (volume) {
   document.getElementById("volume").value = volume;
 }
 
-function handleFiles() {
+function handleDrop(event) {
+  event.preventDefault();
+
+  if (event.dataTransfer.files.length > 0) {
+    const file = event.dataTransfer.files[0];
+    handleFile(file);
+  }
+}
+
+function handleDragOver(event) {
+  event.preventDefault();
+}
+
+function handleFilePicker() {
   const fileList = this.files;
   const file = fileList[0];
+  handleFile(file);
+}
+
+function handleFile(file) {
   fileName = file.name;
   const fileUrl = URL.createObjectURL(file);
 
@@ -49,7 +66,7 @@ function handleFiles() {
   // Show waveform
   const waveformContainer = document.getElementById("waveform-container");
   waveformContainer.style.display = "";
-  const uploadPrompt = document.getElementById("upload-prompt");
+  const uploadPrompt = document.getElementById("upload-container");
   uploadPrompt.style.display = "none";
 }
 
@@ -93,7 +110,7 @@ addEventListener("keydown", function(event) {
   if (event.key === " ") {
     event.preventDefault(); // stop space from scrolling the page or opening file input
     playpause();
-  } else if (event.key === "ArrowDown" || event.key === "Down") {
+  } else if (event.key === "Enter") { //|| event.key === "ArrowDown" || event.key === "Down") {
     handleMarkAdd();
   } else if (event.key == "ArrowLeft") {
     seekToPreviousMark();
@@ -101,7 +118,7 @@ addEventListener("keydown", function(event) {
   } else if (event.key == "ArrowRight") {
     seekToNextMark();
     event.preventDefault(); // stop arrow from changing volume
-  } else if (event.key == "ArrowUp" || event.key === "Up") {
+  } else if (event.key == "Delete" || event.key == "Backspace") {
     handleMarkRemove();
   }
 });
