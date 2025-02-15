@@ -2,6 +2,7 @@ let marks = [{ id: 0, time: 0.0 }];
 let fileName = "";
 let wavesurfer = undefined;
 let isPlaying = false;
+let currentSpeed = 1.0;
 let unsubscribeFn = null;
 
 const inputElement = document.getElementById("filepicker");
@@ -68,10 +69,15 @@ function handleFiles() {
 // Speed control
 function handleSpeedChange(elem) {
   const newSpeed = parseFloat(elem.value);
-  if (wavesurfer) {
-    wavesurfer.setPlaybackRate(newSpeed);
-  }
+  updateSpeed(newSpeed);
 };
+
+function updateSpeed(value) {
+  currentSpeed = value;
+  if (wavesurfer) {
+    wavesurfer.setPlaybackRate(currentSpeed);
+  }
+}
 
 function handleVolumeChange(inputElement) {
   const maxVolume = 100;
@@ -87,14 +93,12 @@ function handleFinish() {
   setPlaying(false);
 }
 
-addEventListener("keydown", function (event) {
+addEventListener("keydown", function(event) {
   if (event.key === " ") {
     event.preventDefault(); // stop space from scrolling the page or opening file input
     playpause();
   } else if (event.key === "ArrowDown" || event.key === "Down") {
-    const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    addMark(playhead);
-    saveMarks();
+    handleMarkAdd();
   } else if (event.key == "ArrowLeft") {
     seekToPreviousMark();
     event.preventDefault(); // stop arrow from changing volume
@@ -102,10 +106,7 @@ addEventListener("keydown", function (event) {
     seekToNextMark();
     event.preventDefault(); // stop arrow from changing volume
   } else if (event.key == "ArrowUp" || event.key === "Up") {
-    if (marks.length === 0) return;
-    const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-    removeClosestMark(playhead);
-    saveMarks();
+    handleMarkRemove();
   }
 });
 
@@ -113,13 +114,13 @@ function setPlaying(shouldPlay) {
   if (!wavesurfer) {
     return;
   }
-  isPlaying = shouldPlay; 
+  isPlaying = shouldPlay;
   if (shouldPlay) {
     wavesurfer.play();
   } else {
     wavesurfer.pause();
   }
-  handleSpeedChange(document.getElementById("speedSelect"));
+  updateSpeed(currentSpeed);
   updatePlayIcon();
 }
 
@@ -179,6 +180,19 @@ function seekToNextMark() {
 function handleMarkClick(markdiv) {
   const markTime = markdiv.style.left.slice(0, -1) / 100;
   wavesurfer.seekTo(markTime);
+}
+
+function handleMarkAdd() {
+  const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
+  addMark(playhead);
+  saveMarks();
+}
+
+function handleMarkRemove() {
+  if (marks.length === 0) return;
+  const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
+  removeClosestMark(playhead);
+  saveMarks();
 }
 
 function addMark(percentage) {

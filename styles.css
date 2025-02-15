@@ -38,22 +38,18 @@ body {
   border-bottom: 13px solid #ec4899;
 }
 
+.main {
+  /* display: grid; */
+  /* justify-items: centre; */
+}
+
 .controls {
-  border-radius: 50%;
-  background-color: #262626;
+  background-color: transparent;
   padding: 20px;
   border: none;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   color: #be185d;
   appearance: none;
   -webkit-appearance: none;
-  /* background-color: #04AA6D;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px; */
 }
 
 .play-icon {
@@ -83,4 +79,101 @@ body {
   height: 26px;
   background-color: #be185d;
   border-radius: 1px;
+}
+
+.controls-card {
+  color: #be185d;
+  max-width: 20rem;
+  margin: auto;
+  border-radius: 0.25rem;
+  display: grid;
+  row-gap: 1rem;
+  padding-block: 2rem;
+}
+
+.nav-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  border: 2px solid #be185d;
+  border-radius: 1rem;
+  height: 5rem;
+}
+
+.bookmark-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  /* height: 5rem; */
+}
+
+.bookmark-nav-button {
+  background-color: transparent;
+  padding: 20px;
+  border: none;
+  color: #be185d;
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: 2rem;
+}
+
+.bookmark-button {
+  display: grid;
+  border: 2px solid #be185d;
+  border-radius: 0.8rem;
+  width: 4rem;
+  height: 4rem;
+  justify-items: center;
+  align-items: center;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  color: #be185d;
+  font-size: 1.5rem;
+}
+
+.volume-controls {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  border: 2px solid #be185d;
+  border-radius: 1rem;
+  justify-items: center;
+  align-items: center;
+  height: 5rem;
+  font-size: 1.4rem;
+}
+
+.volume-slider {
+  width: 80%;
+}
+
+.speed-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.speed-button {
+  display: grid;
+  border: 2px solid #be185d;
+  border-radius: 0.8rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  justify-items: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.speed-radio {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.speed-radio:checked ~ label {
+  color: #171717;
+  background-color: #be185d;
 }

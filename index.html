@@ -27,60 +27,74 @@
       </div>
     </div>
     <!-- <div id="help-button" class="button">?</div> -->
-
-    <p>Spacebar to play/pause</p>
-    <p>Down arrow to add mark</p>
-    <p>Left arrow seek to previous mark</p>
-    <p>Right arrow seek to next mark</p>
-    <p>Up arrow to delete closest mark</p>
-
-    <label for="volume">Volume</label>
-    <input
-      type="range"
-      id="volume"
-      name="volume"
-      min="0"
-      max="100"
-      value="100"
-      onchange="handleVolumeChange(this)"
-    />
-    <br />
-    <br />
-    <label>
-      Playback Speed:
-      <select id="speedSelect" onchange="handleSpeedChange(this)">
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1" selected>1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-      </select>
-    </label>
-    <br />
-    <br />
-    <button class="controls" onclick="seekToPreviousMark()">
-      &lt;
-    </button>
-    <button class="controls">
-        <div
-          id="play-icon"
-          class="play-icon"
-          onclick="playpause()"
-        ></div>
-        <div
-          id="pause-icon"
-          class="pause-icon"
-          onclick="playpause()"
-          style="display: none;"
-        >
-          <div class="pause-bar"></div>
-          <div class="pause-bar"></div>
+    <div class="main">
+      <div class="controls-card">
+        <div class="nav-controls">
+          <button class="bookmark-nav-button" onclick="seekToPreviousMark()">
+            &lt;
+          </button>
+          <div class="play-pause-button">
+            <button class="controls">
+                <div
+                  id="play-icon"
+                  class="play-icon"
+                  onclick="playpause()"
+                ></div>
+                <div
+                  id="pause-icon"
+                  class="pause-icon"
+                  onclick="playpause()"
+                  style="display: none;"
+                >
+                  <div class="pause-bar"></div>
+                  <div class="pause-bar"></div>
+                </div>
+            </button>
+          </div>
+          <button class="bookmark-nav-button" onclick="seekToNextMark()">
+            >
+          </button>
         </div>
-    </button>
-    <button class="controls" onclick="seekToNextMark()">
-      >
-    </button>
+        <div class="bookmark-controls">
+          <button class="bookmark-button" onclick="handleMarkAdd()">+</button>
+          <button class="bookmark-button" onclick="handleMarkRemove()">-</button>
+        </div>
+        <div class="volume-controls">
+          <label for="volume"><)))</label>
+          <input
+            type="range"
+            id="volume"
+            name="volume"
+            class="volume-slider"
+            min="0"
+            max="100"
+            value="100"
+            onchange="handleVolumeChange(this)"
+          />
+        </div>
+        <div class="speed-controls">
+          <div>
+            <input type="radio" class="speed-radio" name="speed" id="0.5" checked="checked" value="0.5" onchange="handleSpeedChange(this)">
+            <label class="speed-button" for="0.5">0.5</label>
+          </div>
+          <div>
+            <input type="radio" class="speed-radio" name="speed" id="0.75" value="0.75" onchange="handleSpeedChange(this)">
+            <label class="speed-button" for="0.75">0.75</label>
+          </div>
+          <div>
+            <input type="radio" class="speed-radio" name="speed" id="1.0" value="1.0" onchange="handleSpeedChange(this)">
+            <label class="speed-button" for="1.0">1.0</label>
+          </div>
+        </div>
+        <div>
+          <p>Spacebar to play/pause</p>
+          <p>Down arrow to add mark</p>
+          <p>Left arrow seek to previous mark</p>
+          <p>Right arrow seek to next mark</p>
+          <p>Up arrow to delete closest mark</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/wavesurfer.js@7"></script>
