@@ -87,31 +87,35 @@
           />
         </div>
         <div class="speed-controls">
-          <div>
+          <div class="speed-radio">
             <input type="radio" class="speed-radio" name="speed" id="0.5" value="0.5" onchange="handleSpeedChange(this)">
             <label class="speed-button" for="0.5">0.5x</label>
           </div>
-          <div>
+          <div class="speed-radio">
             <input type="radio" class="speed-radio" name="speed" id="0.75" value="0.75" onchange="handleSpeedChange(this)">
             <label class="speed-button" for="0.75">0.75x</label>
           </div>
-          <div>
+          <div class="speed-radio">
             <input type="radio" class="speed-radio" name="speed" id="1.0" checked="checked" value="1.0" onchange="handleSpeedChange(this)">
             <label class="speed-button" for="1.0">1.0x</label>
           </div>
         </div>
-        <br />
-        <details class="shortcuts">
-          <summary>Keyboard Shortcuts</summary>
-          <ul>
-          <li>Space: Play/pause</li>
-          <li>Down/Enter: Add mark</li>
-          <li>Left: Seek to previous mark</li>
-          <li>Right: Seek to next mark</li>
-          <li>Backspace/delete: Delete closest mark</li>
-          </ul>
-        </details>
+        <div class="secondary-filepicker">
+          <label for="filepicker" class="custom-file-upload">Browse</label>
+          <input type="file" id="filepicker" multiple />
+        </div>
       </div>
+      <br/>
+      <details class="shortcuts">
+        <summary>Keyboard Shortcuts</summary>
+        <ul>
+        <li>Space: Play/pause</li>
+        <li>Down/Enter: Add mark</li>
+        <li>Left: Seek to previous mark</li>
+        <li>Right: Seek to next mark</li>
+        <li>Backspace/delete: Delete closest mark</li>
+        </ul>
+      </details>
     </div>
 
     <!-- Scripts -->
