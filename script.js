@@ -182,10 +182,11 @@ function seekToNextMark() {
     return;
   }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
+  const epsilon = 0.00001;
   if (marks.length === 0) return;
   let closestMark = null;
   for (let mark of [...marks].reverse()) {
-    if (mark.time > playhead) {
+    if (mark.time - epsilon > playhead) {
       closestMark = mark;
     } else {
       break;
