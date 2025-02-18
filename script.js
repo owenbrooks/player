@@ -14,6 +14,11 @@ if (volume) {
   document.getElementById("volume").value = volume;
 }
 
+// Registering Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service_worker.js');
+}
+
 function handleDrop(event) {
   event.preventDefault();
 
