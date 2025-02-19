@@ -59,6 +59,7 @@ function handleFile(file) {
     url: fileUrl,
   });
   unsubscribeFn = wavesurfer.on("finish", handleFinish);
+  wavesurfer.on("ready", handleReady);
 
   // Load marks if we have any saved
   loadMarks(fileName);
@@ -105,6 +106,11 @@ function handleVolumeChange(inputElement) {
   const volumeFraction = newVolume / maxVolume;
   wavesurfer?.setVolume(volumeFraction);
   localStorage.setItem("volume", newVolume);
+}
+
+function handleReady() {
+  wavesurfer.play();
+  wavesurfer.pause();
 }
 
 function handleFinish() {

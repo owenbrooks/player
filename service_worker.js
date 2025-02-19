@@ -1,6 +1,6 @@
 // Follows guidance at https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Offline_Service_workers
 
-const DEV_MODE_DISABLE_CACHING = true;
+const DEV_MODE_DISABLE_CACHING = false;
 
 const cacheName = "replay-v2";
 const appShellFiles = [
