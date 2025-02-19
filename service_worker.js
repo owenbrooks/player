@@ -1,6 +1,7 @@
 // Follows guidance at https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Offline_Service_workers
 
-// This goes in service worker
+const DEV_MODE_DISABLE_CACHING = true;
+
 const cacheName = "replay-v2";
 const appShellFiles = [
   "/",
@@ -33,10 +34,12 @@ self.addEventListener("fetch", (e) => {
   // We just serve the fetch from the cache
   e.respondWith(
     (async () => {
-      const r = await caches.match(e.request);
-      console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
-      if (r) {
-        return r;
+      if (!DEV_MODE_DISABLE_CACHING) {
+        const r = await caches.match(e.request);
+        console.log(`[Service Worker] Fetching resource: ${e.request.url}`);
+        if (r) {
+          return r;
+        }
       }
       const response = await fetch(e.request);
       const cache = await caches.open(cacheName);
