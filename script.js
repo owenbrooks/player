@@ -90,6 +90,10 @@ function handleFile(file) {
   waveformContainer.style.display = "";
   const uploadPrompt = document.getElementById("upload-container");
   uploadPrompt.style.display = "none";
+
+  // Show the other file picker button
+  const secondaryPicker = document.getElementById("secondary-filepicker");
+  secondaryPicker.style.display = "grid";
 }
 
 // // For debugging / dev

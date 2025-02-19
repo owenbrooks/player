@@ -126,6 +126,7 @@ input[type=file] {
   /* border: 2px solid var(--main-accent-color); */
   border-radius: 1rem;
   background-color: var(--alt-bg-color);
+  padding-bottom: 1.4rem;
 }
 
 @media (min-width: 768px) {
@@ -242,8 +243,8 @@ input[type=file] {
 }
 
 .secondary-filepicker {
-  height: 5rem;
-  display: grid;
+  padding-top: 1.0rem;
+  display: none;
   align-items: center;
   align-content: center;
   justify-content: center;
