@@ -315,6 +315,11 @@ function removeClosestMark(playhead) {
     }
   }
 
+  // We prevent deletion of the mark at the beginning
+  if (closestIndex === 0) {
+    return;
+  }
+
   // Remove from DOM
   const closestMarkId = marks[closestIndex].id;
   this.document
