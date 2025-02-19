@@ -208,6 +208,8 @@ function warmUpPlayer() {
   // It must be in response to a user input, not automatic
   wavesurfer.play();
   wavesurfer.pause();
+  wavesurfer.play();
+  warmedUp = true;
 }
 
 function seekToNextMark() {
