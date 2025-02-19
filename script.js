@@ -4,19 +4,36 @@ let wavesurfer = undefined;
 let isPlaying = false;
 let currentSpeed = 1.0;
 let unsubscribeFn = null;
+let warmedUp = false;
 
-const inputElement = document.getElementById("filepicker");
-inputElement.addEventListener("change", handleFilePicker, false);
+initialiseServiceWorker();
+initialiseVolume();
+initialiseFilePicker();
 
-// Load volume and speed settings if we have any saved
-const volume = localStorage.getItem("volume");
-if (volume) {
-  document.getElementById("volume").value = volume;
+function initialiseServiceWorker() {
+  // Registering Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service_worker.js');
+  }
 }
 
-// Registering Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service_worker.js');
+function initialiseVolume() {
+  if (isRunningiOS()) {
+    // Volume cannot be controlled on iOS: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/Using_HTML5_Audio_Video/Device-SpecificConsiderations/Device-SpecificConsiderations.html
+    // "On iOS devices, the audio level is always under the user’s physical control. The volume property is not settable in JavaScript. Reading the volume property always returns 1."
+    document.getElementById("volume-controls").style.display = "none";
+  }
+
+  // Load volume and speed settings if we have any saved
+  const volume = localStorage.getItem("volume");
+  if (volume) {
+    document.getElementById("volume").value = volume;
+  }
+}
+
+function initialiseFilePicker() {
+  const inputElement = document.getElementById("filepicker");
+  inputElement.addEventListener("change", handleFilePicker, false);
 }
 
 function handleDrop(event) {
@@ -59,7 +76,6 @@ function handleFile(file) {
     url: fileUrl,
   });
   unsubscribeFn = wavesurfer.on("finish", handleFinish);
-  wavesurfer.on("ready", handleReady);
 
   // Load marks if we have any saved
   loadMarks(fileName);
@@ -106,11 +122,6 @@ function handleVolumeChange(inputElement) {
   const volumeFraction = newVolume / maxVolume;
   wavesurfer?.setVolume(volumeFraction);
   localStorage.setItem("volume", newVolume);
-}
-
-function handleReady() {
-  wavesurfer.play();
-  wavesurfer.pause();
 }
 
 function handleFinish() {
@@ -169,6 +180,9 @@ function seekToPreviousMark() {
   if (!wavesurfer) {
     return;
   }
+  if (!warmedUp) {
+    warmUpPlayer();
+  }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   if (marks.length === 0) return;
   if (marks.length === 1 && marks[0].time < playhead) {
@@ -188,9 +202,20 @@ function seekToPreviousMark() {
   }
 }
 
+function warmUpPlayer() {
+  // We need to do this at least once before the first time we seek,
+  // otherwise wavesurfer doesn't start playback from the right place
+  // It must be in response to a user input, not automatic
+  wavesurfer.play();
+  wavesurfer.pause();
+}
+
 function seekToNextMark() {
   if (!wavesurfer) {
     return;
+  }
+  if (!warmedUp) {
+    warmUpPlayer();
   }
   const playhead = wavesurfer.getCurrentTime() / wavesurfer.getDuration();
   const epsilon = 0.00001;
@@ -310,4 +335,18 @@ function loadMarks(songName) {
       addMark(mark.time);
     }
   }
+}
+
+// Sourced from https://stackoverflow.com/a/9039885
+function isRunningiOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
