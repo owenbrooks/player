@@ -11,6 +11,15 @@ body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+.filter-primary {
+  filter: invert(15%) sepia(85%) saturate(3183%) hue-rotate(320deg) brightness(97%) contrast(95%);
+}
+
+.speaker-icon {
+  padding-left: 2rem;
+  padding-right: 1rem;
+}
+
 .dropzone-overlay {
   display: none;
   position: fixed;
@@ -197,7 +206,7 @@ input[type=file] {
 }
 
 .volume-controls {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 3fr;
   justify-items: center;
   align-items: center;
@@ -206,7 +215,7 @@ input[type=file] {
 }
 
 .volume-slider {
-  width: 80%;
+  width: 65%;
   accent-color: var(--main-accent-color);
 }
 

@@ -12,7 +12,13 @@
     <meta name="apple-mobile-web-app-title" content="Replay" />
     <link rel="manifest" href="/icons/site.webmanifest" />
   </head>
-  <body style="padding: 12px" ondrop="handleDrop(event);" ondragenter="handleDragEnter(event);" ondragleave="handleDragLeave(event);" ondragover="handleDragOver(event);">
+  <body style="padding: 12px" 
+    ondrop="handleDrop(event);" 
+    ondragenter="handleDragEnter(event);" 
+    ondragleave="handleDragLeave(event);" 
+    ondragend="handleDragEnd(event);" 
+    ondragover="handleDragOver(event);"
+  >
     <div id="dropzone-overlay" class="dropzone-overlay"></div>
     <div id="upload-container">
       <div class="waveform-container">
@@ -71,7 +77,7 @@
           <button class="bookmark-button" onclick="handleMarkAdd()">+</button>
         </div>
         <div id="volume-controls" class="volume-controls">
-          <label for="volume"><)))</label>
+          <label for="volume"><img style="height:2.5rem;" class="speaker-icon filter-primary" src="speaker.svg" draggable="false"></label>
           <input
             type="range"
             id="volume"

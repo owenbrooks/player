@@ -84,6 +84,11 @@ function handleDragLeave(event) {
   dropzoneOverlay.style.display = "none";
 }
 
+function handleDragEnd(event) {
+  const dropzoneOverlay = document.getElementById("dropzone-overlay");
+  dropzoneOverlay.style.display = "none";
+}
+
 function handleFilePicker() {
   const fileList = this.files;
   const file = fileList[0];
