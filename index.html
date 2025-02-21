@@ -12,14 +12,11 @@
     <meta name="apple-mobile-web-app-title" content="Replay" />
     <link rel="manifest" href="/icons/site.webmanifest" />
   </head>
-  <body style="padding: 12px">
+  <body style="padding: 12px" ondrop="handleDrop(event);" ondragenter="handleDragEnter(event);" ondragleave="handleDragLeave(event);" ondragover="handleDragOver(event);">
+    <div id="dropzone-overlay" class="dropzone-overlay"></div>
     <div id="upload-container">
       <div class="waveform-container">
-        <div
-          id="drop-zone"
-          ondrop="handleDrop(event);"
-          ondragover="handleDragOver(event);"
-        >
+        <div id="drop-zone">
           <div>Drop your audio file here</div>
           <br/>
           <div>or</div>

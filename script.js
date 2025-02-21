@@ -63,7 +63,6 @@ function handleKeypress(event) {
 
 function handleDrop(event) {
   event.preventDefault();
-
   if (event.dataTransfer.files.length > 0) {
     const file = event.dataTransfer.files[0];
     handleFile(file);
@@ -72,6 +71,17 @@ function handleDrop(event) {
 
 function handleDragOver(event) {
   event.preventDefault();
+  const dropzoneOverlay = document.getElementById("dropzone-overlay");
+  dropzoneOverlay.style.display = "block";
+}
+
+function handleDragEnter(event) {
+  event.preventDefault();
+}
+
+function handleDragLeave(event) {
+  const dropzoneOverlay = document.getElementById("dropzone-overlay");
+  dropzoneOverlay.style.display = "none";
 }
 
 function handleFilePicker() {
@@ -115,6 +125,9 @@ function handleFile(file) {
   waveformContainer.style.display = "";
   const uploadPrompt = document.getElementById("upload-container");
   uploadPrompt.style.display = "none";
+
+  const dropzoneOverlay = document.getElementById("dropzone-overlay");
+  dropzoneOverlay.style.display = "none";
 
   // Show the other file picker button
   const secondaryPicker = document.getElementById("secondary-filepicker");
