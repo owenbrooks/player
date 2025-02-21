@@ -6,12 +6,16 @@ let currentSpeed = 1.0;
 let unsubscribeFn = null;
 let warmedUp = false;
 
-initialiseServiceWorker();
-initialiseVolume();
-initialiseFilePicker();
+main();
+
+function main() {
+  initialiseServiceWorker();
+  initialiseVolume();
+  initialiseFilePicker();
+  initialiseKeyboardControls();
+}
 
 function initialiseServiceWorker() {
-  // Registering Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service_worker.js');
   }
@@ -34,6 +38,27 @@ function initialiseVolume() {
 function initialiseFilePicker() {
   const inputElement = document.getElementById("filepicker");
   inputElement.addEventListener("change", handleFilePicker, false);
+}
+
+function initialiseKeyboardControls() {
+  addEventListener("keydown", handleKeypress);
+}
+
+function handleKeypress(event) {
+  if (event.key === " ") {
+    event.preventDefault(); // stop space from scrolling the page or opening file input
+    playpause();
+  } else if (event.key === "Enter") { //|| event.key === "ArrowDown" || event.key === "Down") {
+    handleMarkAdd();
+  } else if (event.key === "ArrowLeft") {
+    seekToPreviousMark();
+    event.preventDefault(); // stop arrow from changing volume
+  } else if (event.key === "ArrowRight") {
+    seekToNextMark();
+    event.preventDefault(); // stop arrow from changing volume
+  } else if (event.key === "Delete" || event.key === "Backspace") {
+    handleMarkRemove();
+  }
 }
 
 function handleDrop(event) {
@@ -132,23 +157,6 @@ function handleFinish() {
   setPlaying(false);
 }
 
-addEventListener("keydown", function(event) {
-  if (event.key === " ") {
-    event.preventDefault(); // stop space from scrolling the page or opening file input
-    playpause();
-  } else if (event.key === "Enter") { //|| event.key === "ArrowDown" || event.key === "Down") {
-    handleMarkAdd();
-  } else if (event.key == "ArrowLeft") {
-    seekToPreviousMark();
-    event.preventDefault(); // stop arrow from changing volume
-  } else if (event.key == "ArrowRight") {
-    seekToNextMark();
-    event.preventDefault(); // stop arrow from changing volume
-  } else if (event.key == "Delete" || event.key == "Backspace") {
-    handleMarkRemove();
-  }
-});
-
 function setPlaying(shouldPlay) {
   if (!wavesurfer) {
     return;
@@ -210,9 +218,12 @@ function warmUpPlayer() {
   // We need to do this at least once before the first time we seek,
   // otherwise wavesurfer doesn't start playback from the right place
   // It must be in response to a user input, not automatic
+  // See https://github.com/katspaugh/wavesurfer.js/discussions/3896#discussioncomment-12247248
   wavesurfer.play();
   wavesurfer.pause();
-  wavesurfer.play();
+  if (isPlaying) {
+    wavesurfer.play();
+  }
   warmedUp = true;
 }
 
