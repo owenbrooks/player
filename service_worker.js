@@ -2,7 +2,7 @@
 
 const DEV_MODE_DISABLE_CACHING = false;
 
-const cacheName = "replay-v2";
+const cacheName = "replay-v3";
 const appShellFiles = [
   "/",
   "/index.html",
